@@ -14,6 +14,10 @@ declare module "qrcode" {
 
   export interface QRCode {
     version: number;
+    modules: {
+      size: number;
+      data: Uint8Array;
+    };
   }
 
   interface QRCodeApi {
