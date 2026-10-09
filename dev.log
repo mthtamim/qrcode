@@ -29,3 +29,36 @@
 3:58:34 PM [vite] (ssr) program reload
 3:58:39 PM [vite] (client) hmr update /src/styles.css?direct, /src/components/qr-maker.tsx
 3:58:39 PM [vite] (ssr) page reload src/components/qr-maker.tsx
+4:21:51 PM [vite] (client) hmr update /src/styles.css?direct
+4:22:39 PM [vite] (client) hmr update /src/styles.css?direct
+4:23:28 PM [vite] (client) hmr update /src/styles.css?direct
+4:24:20 PM [vite] (client) hmr update /src/styles.css?direct
+4:30:39 PM [vite] (client) hmr update /src/styles.css?direct, /src/components/qr-maker-sections/design-section.tsx
+4:30:39 PM [vite] (ssr) page reload src/components/qr-maker-sections/design-section.tsx
+4:30:39 PM [vite] (ssr) program reload
+4:33:06 PM [vite] (client) hmr update /src/styles.css?direct, /src/components/qr-maker.tsx, /src/components/qr-maker-sections/templates-section.tsx, /src/components/qr-maker-sections/history-section.tsx, /src/components/qr-maker-sections/design-section.tsx
+4:33:06 PM [vite] (ssr) page reload src/lib/store/qr-store.ts
+4:33:11 PM [vite] (client) hmr update /src/styles.css?direct, /src/components/qr-maker.tsx
+4:33:11 PM [vite] (ssr) page reload src/components/qr-maker.tsx
+4:33:16 PM [vite] (client) hmr update /src/styles.css?direct, /src/components/qr-maker-sections/history-section.tsx
+4:33:16 PM [vite] (ssr) page reload src/components/qr-maker-sections/history-section.tsx
+4:33:24 PM [vite] (client) hmr update /src/styles.css?direct, /src/components/qr-maker-sections/design-section.tsx
+4:33:24 PM [vite] (ssr) page reload src/components/qr-maker-sections/design-section.tsx
+4:33:37 PM [vite] (client) hmr update /src/styles.css?direct, /src/components/custom-qr-renderer.tsx
+4:33:37 PM [vite] (ssr) page reload src/components/custom-qr-renderer.tsx
+4:37:02 PM [vite] (client) hmr update /src/styles.css?direct, /src/components/qr-maker.tsx
+4:37:02 PM [vite] (ssr) page reload src/components/qr-maker.tsx
+4:37:06 PM [vite] (client) hmr update /src/styles.css?direct, /src/components/qr-maker.tsx
+4:37:06 PM [vite] (ssr) page reload src/lib/qr/helpers.ts
+4:40:30 PM [vite] (client) [optimizer] bundling dependencies...
+4:40:32 PM [vite] (client) dependency optimized: jspdf
+4:40:32 PM [vite] (client) optimized dependencies changed. reloading
+4:52:11 PM [vite] (client) hmr update /src/styles.css?direct, /src/components/qr-maker-sections/design-section.tsx
+4:52:11 PM [vite] (ssr) page reload src/components/qr-maker-sections/design-section.tsx
+4:52:11 PM [vite] (ssr) program reload
+4:56:35 PM [vite] (client) hmr update /src/styles.css?direct, /src/components/qr-maker.tsx
+4:56:35 PM [vite] (ssr) page reload src/components/qr-maker.tsx
+4:58:52 PM [vite] (client) hmr update /src/styles.css?direct, /src/components/qr-maker.tsx
+4:58:52 PM [vite] (ssr) page reload src/components/qr-maker.tsx
+5:04:43 PM [vite] (client) [optimizer] bundling dependencies...
+5:04:43 PM [vite] (client) dependency optimized: react-dom/server

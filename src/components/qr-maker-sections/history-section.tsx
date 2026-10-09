@@ -56,6 +56,7 @@ export function HistorySection() {
                     gradientType: item.config.gradientType,
                     moduleShape: item.config.moduleShape,
                     finderShape: item.config.finderShape,
+                    frame: item.config.frame,
                     logoUrl: item.config.logoUrl,
                   });
                 }}

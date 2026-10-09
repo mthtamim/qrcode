@@ -6,6 +6,7 @@ export type QrLevel = "L" | "M" | "Q" | "H";
 export type ModuleShape = "square" | "dots" | "rounded";
 export type FinderShape = "square" | "rounded" | "dots";
 export type GradientType = "none" | "linear" | "radial";
+export type FrameType = "none" | "scan-me-bottom";
 
 export interface QrState {
   // Data
@@ -26,6 +27,7 @@ export interface QrState {
   gradientType: GradientType;
   moduleShape: ModuleShape;
   finderShape: FinderShape;
+  frame: FrameType;
 
   // Logo
   logoUrl: string | null;
@@ -39,7 +41,7 @@ export interface QrState {
   updateLocation: (data: Partial<QrState["locationData"]>) => void;
   setBatchData: (data: string[]) => void;
 
-  setDesign: (data: Partial<Pick<QrState, "fg1" | "fg2" | "bg" | "size" | "ecl" | "gradientType" | "moduleShape" | "finderShape" | "logoUrl">>) => void;
+  setDesign: (data: Partial<Pick<QrState, "fg1" | "fg2" | "bg" | "size" | "ecl" | "gradientType" | "moduleShape" | "finderShape" | "frame" | "logoUrl">>) => void;
 
   clearData: () => void;
 }
@@ -77,6 +79,7 @@ const initialDesignState = {
   gradientType: "none" as GradientType,
   moduleShape: "square" as ModuleShape,
   finderShape: "square" as FinderShape,
+  frame: "none" as FrameType,
   logoUrl: null,
 };
 

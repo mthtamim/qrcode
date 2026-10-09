@@ -38,7 +38,7 @@ export function generateLocationString(lat: number, lng: number): string {
   return `geo:${lat},${lng}`;
 }
 
-export function getDynamicFilename(text: string, ext: "png" | "svg"): string {
+export function getDynamicFilename(text: string, ext: "png" | "svg" | "pdf"): string {
   if (!text) return `qr-code.${ext}`;
   // take first 20 alphanumeric chars
   const clean = text.replace(/[^a-z0-9]/gi, "-").replace(/-+/g, "-").replace(/^-|-$/g, "").slice(0, 20);
