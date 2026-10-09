@@ -1,5 +1,5 @@
-import { i as __toESM } from "../_runtime.mjs";
-import { K as require_react } from "./@tanstack/react-router+[...].mjs";
+import { o as __toESM } from "../_runtime.mjs";
+import { q as require_react } from "./@tanstack/react-router+[...].mjs";
 //#region node_modules/lucide-react/dist/esm/shared/src/utils.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 /**
@@ -76,24 +76,6 @@ var createLucideIcon = (iconName, iconNode) => {
 	Component.displayName = toPascalCase(iconName);
 	return Component;
 };
-/**
-* @license lucide-react v0.510.0 - ISC
-*
-* This source code is licensed under the ISC license.
-* See the LICENSE file in the root directory of this source tree.
-*/
-var Copy = createLucideIcon("copy", [["rect", {
-	width: "14",
-	height: "14",
-	x: "8",
-	y: "8",
-	rx: "2",
-	ry: "2",
-	key: "17jyea"
-}], ["path", {
-	d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2",
-	key: "zix9uf"
-}]]);
 /**
 * @license lucide-react v0.510.0 - ISC
 *
@@ -221,4 +203,4 @@ var X = createLucideIcon("x", [["path", {
 	key: "d8bk6v"
 }]]);
 //#endregion
-export { RotateCcw as a, Trash2 as i, Upload as n, Download as o, TriangleAlert as r, Copy as s, X as t };
+export { RotateCcw as a, Trash2 as i, Upload as n, Download as o, TriangleAlert as r, X as t };

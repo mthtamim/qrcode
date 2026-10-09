@@ -11,6 +11,7 @@ interface CustomQrRendererProps {
   gradientType: GradientType;
   moduleShape: ModuleShape;
   finderShape: FinderShape;
+  frame?: "none" | "scan-me-bottom";
   logoUrl: string | null;
 }
 
@@ -23,14 +24,31 @@ export function CustomQrRenderer({
   gradientType,
   moduleShape,
   finderShape,
+  frame = "none",
   logoUrl,
 }: CustomQrRendererProps) {
-  const margin = 4;
+  const baseMargin = 4;
+  const frameBottomMargin = frame === "scan-me-bottom" ? 10 : 0;
+  const frameTopMargin = frame === "scan-me-bottom" ? 2 : 0;
+  const frameSideMargin = frame === "scan-me-bottom" ? 2 : 0;
+
+  const marginX = baseMargin + frameSideMargin;
+  const marginTop = baseMargin + frameTopMargin;
+  const marginBottom = baseMargin + frameBottomMargin;
 
   if (!qr) return null;
 
   const length = qr.modules.size;
-  const cellSize = size / (length + 2 * margin);
+  // Size represents the full requested dimension
+  // We need to scale cells so everything fits within 'size' considering asymmetrical margins
+  const totalCellsX = length + 2 * marginX;
+  const totalCellsY = length + marginTop + marginBottom;
+
+  const cellSize = Math.min(size / totalCellsX, size / totalCellsY);
+
+  // Real output size will be exact to preserve square cells
+  const realWidth = cellSize * totalCellsX;
+  const realHeight = cellSize * totalCellsY;
 
   // Determine if a module is part of the 3 finder patterns
   const isFinder = (x: number, y: number) => {
@@ -149,15 +167,14 @@ export function CustomQrRenderer({
     }
   }
 
-  // viewBox should just be the qr code dimensions
-  const innerSize = size - 2 * margin * cellSize;
+  const innerSize = length * cellSize;
 
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
-      viewBox={`-${margin * cellSize} -${margin * cellSize} ${size} ${size}`}
+      width={realWidth}
+      height={realHeight}
+      viewBox={`-${marginX * cellSize} -${marginTop * cellSize} ${realWidth} ${realHeight}`}
       fill="none"
       shapeRendering="crispEdges"
       className="w-full h-auto max-w-full"
@@ -178,7 +195,42 @@ export function CustomQrRenderer({
         )}
       </defs>
 
-      <rect x={-margin * cellSize} y={-margin * cellSize} width={size} height={size} fill={bg} />
+      <rect x={-marginX * cellSize} y={-marginTop * cellSize} width={realWidth} height={realHeight} fill={bg} />
+
+      {frame === "scan-me-bottom" && (
+        <g>
+           <rect
+             x={(-marginX + 1) * cellSize}
+             y={(-marginTop + 1) * cellSize}
+             width={realWidth - 2 * cellSize}
+             height={realHeight - 2 * cellSize}
+             fill="none"
+             stroke={fillUrl}
+             strokeWidth={cellSize * 0.5}
+             rx={cellSize * 2}
+           />
+           <rect
+             x={(-marginX + 1) * cellSize}
+             y={length * cellSize + baseMargin * cellSize}
+             width={realWidth - 2 * cellSize}
+             height={(frameBottomMargin - baseMargin - 1) * cellSize}
+             fill={fillUrl}
+             rx={cellSize * 2}
+           />
+           <text
+             x={realWidth / 2 - marginX * cellSize}
+             y={length * cellSize + baseMargin * cellSize + ((frameBottomMargin - baseMargin - 1) * cellSize) / 2}
+             fill={bg}
+             fontSize={cellSize * 3}
+             fontWeight="bold"
+             fontFamily="sans-serif"
+             textAnchor="middle"
+             dominantBaseline="middle"
+           >
+             SCAN ME
+           </text>
+        </g>
+      )}
 
       <path d={modulePath} fill={fillUrl} />
 

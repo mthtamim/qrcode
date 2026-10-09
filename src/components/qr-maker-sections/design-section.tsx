@@ -95,6 +95,13 @@ export function DesignSection() {
     }
   };
 
+  const logoPresets = [
+    { name: "Twitter", url: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXR3aXR0ZXIiPjxwYXRoIGQ9Ik0yMiA0cy0uNyAyLjEtMiAzLjRjMS42IDEwLTkuNCAxNy4zLTE4IDExLjYgMi4yLjEgNC40LS42IDYtMkMzIDE1LjUuNSA5LjYgMyA1YzIuMiAyLjYgNS42IDQuMSA5IDQtLjktNC4yIDQtNi42IDctMy44IDEuMSAwIDMtMS4yIDMtMS4yeiIvPjwvc3ZnPgo=" },
+    { name: "Facebook", url: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWZhY2Vib29rIj48cGF0aCBkPSJNMTggMmgtM2E1IDUgMCAwIDAtNSA1djNIN3Y0aDN2OGg0di04aDNsMS00aC00VjdhMSAxIDAgMCAxIDEtMWgzeiIvPjwvc3ZnPgo=" },
+    { name: "GitHub", url: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWdpdGh1YiI+PHBhdGggZD0iTTE1IDIydi00YTQuOCA0LjggMCAwIDAtMS0zLjVjMyAwIDYtMiA2LTUuNS4wOC0xLjI1LS4yNy0yLjQ4LTEtMy41LjI4LTEuMTUuMjgtMi4zNSAwLTMuNSAwIDAtMSAwLTMgMS41LTIuNjQtLjUtNS4zNi0uNS04IDBDNiAyIDUgMiA1IDJjLS4zIDEuMTUtLjMgMi4zNSAwIDMuNUE1LjQwMyA1LjQwMyAwIDAgMCA0IDljMCAzLjUgMyA1LjUgNiA1LjUtLjM5LjQ5LS42OCAxLjA1LS44NSAxLjY1LS4xNy42LS4yMiAxLjIzLS4xNSAxLjg1djQiLz48cGF0aCBkPSJNOSAxOGMtNC41MSAyLTUtMi03LTIiLz48L3N2Zz4K" },
+    { name: "YouTube", url: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXlvdXR1YmUiPjxwYXRoIGQ9Ik0yLjUgMTdhMjQuMTIgMjQuMTIgMCAwIDEgMC0xMCAyIDIgMCAwIDEgMS40LTEuNCA0OS41NiA0OS41NiAwIDAgMSAxNi4yIDBBMiAyIDAgMCAxIDIxLjUgN2EyNC4xMiAyNC4xMiAwIDAgMSAwIDEwIDIgMiAwIDAgMS0xLjQgMS40IDQ5LjU1IDQ5LjU1IDAgMCAxLTE2LjIgMEEyIDIgMCAwIDEgMi41IDE3Ii8+PHBhdGggZD0ibTEwIDE1IDUtMy01LTN6Ii8+PC9zdmc+Cg==" },
+  ];
+
   return (
     <div className="rounded-lg border border-border bg-surface p-5 space-y-6">
 
@@ -129,10 +136,10 @@ export function DesignSection() {
 
       <div className="border-t border-border pt-6">
         <h2 className="text-sm font-medium text-fg mb-4">Shapes</h2>
-        <div className="grid gap-6 sm:grid-cols-2">
+        <div className="grid gap-6 sm:grid-cols-3">
           <div>
-            <label className="text-xs text-muted mb-2 block">Dots Shape</label>
-            <div className="flex gap-2">
+            <label className="text-xs text-muted mb-2 block">Dots</label>
+            <div className="flex flex-col gap-2">
               {(["square", "dots", "rounded"] as const).map((shape) => (
                 <button
                   key={shape}
@@ -147,8 +154,8 @@ export function DesignSection() {
             </div>
           </div>
           <div>
-            <label className="text-xs text-muted mb-2 block">Finder Shape</label>
-            <div className="flex gap-2">
+            <label className="text-xs text-muted mb-2 block">Finder</label>
+            <div className="flex flex-col gap-2">
               {(["square", "dots", "rounded"] as const).map((shape) => (
                 <button
                   key={shape}
@@ -162,39 +169,70 @@ export function DesignSection() {
               ))}
             </div>
           </div>
+          <div>
+            <label className="text-xs text-muted mb-2 block">Frame</label>
+            <div className="flex flex-col gap-2">
+              {(["none", "scan-me-bottom"] as const).map((frame) => (
+                <button
+                  key={frame}
+                  onClick={() => store.setDesign({ frame })}
+                  className={`px-3 py-1.5 text-xs rounded-sm transition-colors ${
+                    store.frame === frame ? "bg-primary text-primary-fg" : "bg-stage border border-border text-fg hover:border-fg"
+                  }`}
+                >
+                  {frame === "scan-me-bottom" ? "Scan Me Frame" : "No Frame"}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
       <div className="border-t border-border pt-6">
         <h2 className="text-sm font-medium text-fg mb-4">Center Logo</h2>
-        <div className="flex items-center gap-4">
-          <input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            ref={fileInputRef}
-            onChange={handleLogoUpload}
-          />
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2 h-11 px-4 rounded-sm border border-border bg-stage text-sm text-fg hover:border-fg transition-colors"
-          >
-            <Upload className="size-4" />
-            Upload Logo
-          </button>
-
-          {store.logoUrl && (
-            <div className="flex items-center gap-2">
-              <img src={store.logoUrl} alt="Logo preview" className="size-11 object-contain bg-white border border-border rounded-sm" />
+        <div className="space-y-4">
+          <div className="flex flex-wrap gap-2">
+            {logoPresets.map((preset) => (
               <button
-                onClick={() => store.setDesign({ logoUrl: null })}
-                className="p-2 text-muted hover:text-red-500 transition-colors"
-                title="Remove logo"
+                key={preset.name}
+                onClick={() => store.setDesign({ logoUrl: preset.url, ecl: "H" })}
+                className="flex h-9 items-center gap-2 rounded-sm border border-border bg-stage px-3 text-xs font-medium text-fg hover:border-fg transition-colors"
               >
-                <X className="size-4" />
+                <img src={preset.url} alt={preset.name} className="size-4" />
+                {preset.name}
               </button>
-            </div>
-          )}
+            ))}
+          </div>
+
+          <div className="flex items-center gap-4">
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              ref={fileInputRef}
+              onChange={handleLogoUpload}
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center gap-2 h-11 px-4 rounded-sm border border-border bg-stage text-sm text-fg hover:border-fg transition-colors"
+            >
+              <Upload className="size-4" />
+              Upload Logo
+            </button>
+
+            {store.logoUrl && (
+              <div className="flex items-center gap-2">
+                <img src={store.logoUrl} alt="Logo preview" className="size-11 object-contain bg-white border border-border rounded-sm" />
+                <button
+                  onClick={() => store.setDesign({ logoUrl: null })}
+                  className="p-2 text-muted hover:text-red-500 transition-colors"
+                  title="Remove logo"
+                >
+                  <X className="size-4" />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
         {store.logoUrl && (
           <p className="text-xs text-muted mt-2">Error correction automatically set to High.</p>

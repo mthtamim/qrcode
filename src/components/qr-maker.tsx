@@ -139,26 +139,30 @@ export function QrMaker() {
     });
   };
 
-  const createSvgNode = async (text: string) => {
-    // Generate QR logic manually for batch
+  const createSvgStringForBatch = async (text: string) => {
     const mod = await import("qrcode");
     const created = mod.default.create(text, { errorCorrectionLevel: store.ecl });
-    // This is complex to render a react component to string for each batch item.
-    // Let's use qrcode's native toString for batch SVGs as a simplification.
-    return mod.default.toString(text, {
-      type: "svg",
-      errorCorrectionLevel: store.ecl,
-      margin: 4,
-      width: store.size,
-      color: { dark: store.fg1, light: store.bg } // simplistic colors for batch fallback
-    });
+    const { renderToStaticMarkup } = await import("react-dom/server");
+    return renderToStaticMarkup(
+      <CustomQrRenderer
+        qr={created}
+        fg1={store.fg1}
+        fg2={store.fg2}
+        bg={store.bg}
+        size={store.size}
+        gradientType={store.gradientType}
+        moduleShape={store.moduleShape}
+        finderShape={store.finderShape}
+        frame={store.frame}
+        logoUrl={store.logoUrl}
+      />
+    );
   };
 
   const downloadBatch = async (ext: "png" | "svg") => {
     if (store.batchData.length === 0) return;
     const JSZip = (await import("jszip")).default;
     const zip = new JSZip();
-    const mod = await import("qrcode");
 
     const validBatch = store.batchData.filter(line => line.trim().length > 0);
     for (let i = 0; i < validBatch.length; i++) {
@@ -168,24 +172,28 @@ export function QrMaker() {
         const rawFilename = getDynamicFilename(text, ext);
         const parts = rawFilename.split('.');
         const filename = parts.length > 1 ? `${parts[0]}-${i + 1}.${parts[1]}` : `${rawFilename}-${i + 1}`;
+        const svgString = await createSvgStringForBatch(text);
         if (ext === "svg") {
-            const svgString = await mod.default.toString(text, {
-              type: "svg",
-              errorCorrectionLevel: store.ecl,
-              margin: 4,
-              width: store.size,
-              color: { dark: store.fg1, light: store.bg }
-            });
             zip.file(filename, svgString);
         } else {
-            const dataUrl = await mod.default.toDataURL(text, {
-                errorCorrectionLevel: store.ecl,
-                margin: 4,
-                width: store.size,
-                color: { dark: store.fg1, light: store.bg }
+            // Need to convert this SVG string to a PNG data url
+            const dataUrl = await new Promise<string>((resolve) => {
+              const img = new Image();
+              img.onload = () => {
+                const canvas = document.createElement("canvas");
+                canvas.width = store.size;
+                canvas.height = store.size;
+                const ctx = canvas.getContext("2d");
+                if (ctx) ctx.drawImage(img, 0, 0);
+                resolve(canvas.toDataURL("image/png"));
+              };
+              img.onerror = () => resolve(""); // skip on error
+              img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgString)}`;
             });
-            const base64Data = dataUrl.replace(/^data:image\/png;base64,/, "");
-            zip.file(filename, base64Data, { base64: true });
+            if (dataUrl) {
+                const base64Data = dataUrl.replace(/^data:image\/png;base64,/, "");
+                zip.file(filename, base64Data, { base64: true });
+            }
         }
     }
 
@@ -220,6 +228,23 @@ export function QrMaker() {
     saveToHistory();
   };
 
+  const downloadPdf = async () => {
+    // Generate PDF containing the canvas
+    const canvas = await getCanvas();
+    if (!canvas) return;
+
+    // dynamically import jspdf
+    const jsPDFModule = await import("jspdf");
+    const jsPDF = jsPDFModule.default;
+
+    const url = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "px", [store.size, store.size]);
+    pdf.addImage(url, "PNG", 0, 0, store.size, store.size);
+    pdf.save(getDynamicFilename(debouncedPayload, "pdf"));
+
+    saveToHistory();
+  };
+
   const downloadSvg = () => {
     if (store.dataType === "batch") {
       void downloadBatch("svg");
@@ -242,23 +267,28 @@ export function QrMaker() {
   };
 
   const copyImage = async () => {
-    const canvas = await getCanvas();
-    if (!canvas) return;
+    try {
+      const getBlobPromise = async () => {
+        const canvas = await getCanvas();
+        if (!canvas) throw new Error("Could not create canvas");
+        return new Promise<Blob>((resolve, reject) => {
+          canvas.toBlob((blob) => {
+            if (blob) resolve(blob);
+            else reject(new Error("Could not create blob"));
+          }, "image/png");
+        });
+      };
 
-    canvas.toBlob(async (blob) => {
-      if (!blob) return;
-      try {
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            [blob.type]: blob
-          })
-        ]);
-        alert("Copied to clipboard!");
-      } catch (err) {
-        console.error("Failed to copy image", err);
-        alert("Failed to copy image to clipboard.");
-      }
-    });
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          "image/png": getBlobPromise()
+        })
+      ]);
+      alert("Copied to clipboard!");
+    } catch (err) {
+      console.error("Failed to copy image", err);
+      alert("Failed to copy image to clipboard.");
+    }
   };
 
   const saveToHistory = () => {
@@ -283,6 +313,7 @@ export function QrMaker() {
         gradientType: store.gradientType,
         moduleShape: store.moduleShape,
         finderShape: store.finderShape,
+        frame: store.frame,
         logoUrl: store.logoUrl,
       }
     });
@@ -370,23 +401,29 @@ export function QrMaker() {
                   <Download aria-hidden className="size-4" />
                   {store.dataType === "batch" ? "Download PNGs (ZIP)" : "Download PNG"}
                 </button>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   <button
                     type="button"
                     onClick={downloadSvg}
                     disabled={!qrCode || Boolean(error)}
-                    className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-border bg-surface px-4 text-sm font-medium text-fg transition-colors duration-150 hover:border-fg disabled:cursor-not-allowed disabled:opacity-40"
+                    className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-border bg-surface px-2 text-sm font-medium text-fg transition-colors duration-150 hover:border-fg disabled:cursor-not-allowed disabled:opacity-40"
                   >
-                    <Download aria-hidden className="size-4" />
                     {store.dataType === "batch" ? "SVGs (ZIP)" : "SVG"}
                   </button>
                   <button
                     type="button"
-                    onClick={copyImage}
-                    disabled={!qrCode || Boolean(error)}
-                    className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-border bg-surface px-4 text-sm font-medium text-fg transition-colors duration-150 hover:border-fg disabled:cursor-not-allowed disabled:opacity-40"
+                    onClick={downloadPdf}
+                    disabled={!qrCode || Boolean(error) || store.dataType === "batch"}
+                    className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-border bg-surface px-2 text-sm font-medium text-fg transition-colors duration-150 hover:border-fg disabled:cursor-not-allowed disabled:opacity-40"
                   >
-                    <Copy aria-hidden className="size-4" />
+                    PDF
+                  </button>
+                  <button
+                    type="button"
+                    onClick={copyImage}
+                    disabled={!qrCode || Boolean(error) || store.dataType === "batch"}
+                    className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md border border-border bg-surface px-2 text-sm font-medium text-fg transition-colors duration-150 hover:border-fg disabled:cursor-not-allowed disabled:opacity-40"
+                  >
                     Copy
                   </button>
                 </div>
