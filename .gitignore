@@ -4,6 +4,9 @@ node_modules/
 .env
 .env.*
 .vercel
+parse-*
+test-*
+get-image.cjs
+.vercel/
 android/
-ios/
-pressmark-app.apk
+.grok/
